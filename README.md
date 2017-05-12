@@ -2,6 +2,8 @@
 This project started for Monte-Carlo simulation of telescope for space radiation conditions monitoring.
 It based on Geant4 libraries and R packages.
 
+This project is based on previous work:
+I. A. Zolotarev, L. S. Novikov, V. I. Osedlo, V. I. Tulupov, and N. P. Chirskaya. Numerical simulation of metrological characteristics of cosmic radiation detectors. Inorganic Materials: Applied Research, 8(2):222–228, 2017. [ DOI ]
 Abstract:
 This work presents the technique and results of computer simulation of the interaction of cosmic radiation with detectors. 
 The program code based on Geant4 libraries is designed, to simulate the operation of a telescopic detector of ionizing radiation,
