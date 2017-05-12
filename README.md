@@ -2,6 +2,33 @@
 This project started for Monte-Carlo simulation of telescope for space radiation conditions monitoring.
 It based on Geant4 libraries and R packages.
 
+HOW to RUN analysis with r:
+
+Install R
+
+sudo yum install R -y
+
+Enter the R shell:
+
+sudo -i R
+
+Install the package you need as below, and more packages can be installed in the same fashion:
+
+install.packages('txtplot')
+quit the R shell:
+
+q()
+
+Rscript a.R
+
+or
+
+R CMD BATCH a.R
+# Check the output
+cat a.Rout
+
+
+
 This project is based on previous work:
 I. A. Zolotarev, L. S. Novikov, V. I. Osedlo, V. I. Tulupov, and N. P. Chirskaya. Numerical simulation of metrological characteristics of cosmic radiation detectors. Inorganic Materials: Applied Research, 8(2):222–228, 2017. [ DOI ]
 Abstract:
