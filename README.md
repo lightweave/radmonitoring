@@ -6,26 +6,30 @@ HOW to RUN analysis with r:
 
 Install R
 
-sudo yum install R -y
+  sudo yum install R -y
 
 Enter the R shell:
 
-sudo -i R
+  sudo -i R
 
 Install the package you need as below, and more packages can be installed in the same fashion:
 
-install.packages('txtplot')
+  install.packages('txtplot')
 quit the R shell:
 
-q()
+  q()
 
-Rscript a.R
+Run analysis script:
+
+  Rscript a.R
 
 or
 
-R CMD BATCH a.R
-# Check the output
-cat a.Rout
+  R CMD BATCH a.R
+  
+Check the output:
+
+  cat a.Rout
 
 
 
