@@ -6,7 +6,7 @@ HOW to RUN analysis with r:
 
 Install R
 
-  sudo yum install R -y
+#  sudo yum install R -y
 
 Enter the R shell:
 
