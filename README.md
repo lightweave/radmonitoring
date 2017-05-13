@@ -4,7 +4,7 @@ It based on Geant4 libraries and R packages.
 
 # HOW to RUN analysis with r:
 
-Install R
+Install R(manual from https://www.vultr.com/docs/how-to-install-rstudio-server-on-centos-7 ):
 
 sudo yum install R -y
 
