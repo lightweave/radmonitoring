@@ -1,12 +1,14 @@
 #!/usr/bin/Rscript
 # eval(parse(filename, encoding="UTF-8"))
-# таблицы как я отчитываюсь
+
 # library(data.table)
 # library("Hmisc")
 # library('hexbin')
-library('readr')
-library('dplyr')
 # library('tidyr')
+library(readr)
+library(dplyr)
+library(ggplot2)
+
 
 setwd("D:/Ivan/_flash backup 2014/SINP/2017 Группировка/radmonitoring/analisys")
 
@@ -16,28 +18,30 @@ setwd("D:/Ivan/_flash backup 2014/SINP/2017 Группировка/radmonitoring/analisys")
 # Start the clock!
 ptm <- proc.time()
 
-# таблицы для чирской фацет по сравнению корпусов  -----------------------------
+# таблицы для Чирской фацет по сравнению корпусов  -----------------------------
 
 
 
-# подготовка исходных данных --------------------------------------------------
+# подготовка исходных данных ---------------------------------------------------
 
 filename <- 'facet_nt_signal_t0.csv'
+
 header <- strsplit("evtNb E0.keV pixelNo lineNo dE.keV start_angz start_angphi pixel_angz pixel_angphi", split = ' ')
 datae<-read.csv(filename,col.names = header[[1]],  skip = 13)
 cat('\nData file name:', filename, ':', nrow(datae) )
 
-# подготовка исходных данных 2 --------------------------------------------------
-9_MeV_facet_nt_signal_t0
+# подготовка исходных данных 2 -------------------------------------------------
 
-filename <- 'facet_nt_signal_t0.csv'
-header <- strsplit("evtNb E0.keV pixelNo lineNo dE.keV start_angz start_angphi pixel_angz pixel_angphi", split = ' ')
-datae<-read.csv(filename,col.names = header[[1]],  skip = 13)
+
+filename <- '9_MeV_facet_nt_signal_t0.csv'
+
+header <- strsplit("evtNb E0.keV layerNo pixelNo lineNo dE.keV start_angz start_angphi pixel_angz pixel_angphi", split = ' ')
+datae<-read.csv(filename,col.names = header[[1]],  skip = 14)
 cat('\nData file name:', filename, ':', nrow(datae) )
 
 
 
-# отрисовка ---------------------------------------------------------------
+# отрисовка --------------------------------------------------------------------
 
 
 plot(datae$start_angphi, datae$start_angz)
@@ -69,7 +73,7 @@ ggplot(data = filter(datae), aes(x=pixelNo, y= lineNo)) +
   geom_tile()
 
 
-ggplot(data = filter(datae, evtNb == 182))+
+ggplot(data = filter(datae, evtNb == 528))+
   geom_bin2d(aes(x=pixelNo, y= lineNo))
 
 
@@ -80,21 +84,40 @@ for (evtNumber in unique(datae$evtNb))
     coord_fixed(ratio = 1)
   # specify device when saving to a file with unknown extension
   # (for example a server supplied temporary file)
+  # ggsave(file, device = "pdf")
   ggsave(file, device = "pdf")
 }
 
 
 
-ggplot(data = filter(datae, evtNb == 182), aes(x=pixelNo, y= lineNo)) +
-  geom_tile(aes(fill =  dE.keV)) +
-  coord_fixed(ratio = 1)
-ggplot(data = filter(datae, evtNb == 386), aes(x=pixelNo, y= lineNo)) +
-  geom_tile(aes(fill =  dE.keV)) +
-  coord_fixed(ratio = 1)
-ggplot(data = filter(datae, evtNb == 1353), aes(x=pixelNo, y= lineNo)) +
+
+# select single event -----------------------------------------------------
+
+evtNumber <- select(sample_n(datae, 1), evtNb)[[1]]
+
+# simple draw track-------------------------------------------------------------
+ggplot(data = filter(datae, evtNb == evtNumber), aes(x=pixelNo, y= lineNo)) +
   geom_tile(aes(fill =  dE.keV)) +
   coord_fixed(ratio = 1)
 
+
+# draw track by layer ----------------------------------------------------------
+ggplot(data = filter(datae, evtNb == evtNumber), aes(x=pixelNo, y= lineNo)) +
+  geom_tile(data = filter(datae, evtNb == evtNumber & layerNo == 0), aes(fill =  dE.keV)) +
+  geom_tile(data = filter(datae, evtNb == evtNumber & layerNo == 1), aes(fill =  dE.keV)) +
+  geom_tile(data = filter(datae, evtNb == evtNumber & layerNo == 2), aes(fill =  dE.keV)) +
+  coord_fixed(ratio = 1)
+
+# draw track all layers --------------------------------------------------------
+ggplot(data = filter(datae, evtNb == evtNumber), aes(x=pixelNo, y= lineNo)) +
+  geom_tile(aes(fill =factor(layerNo), alpha = (dE.keV)))+
+  coord_fixed(ratio = 1) #+ scale_fill_manual()
+
+ggsave(paste(evtNumber, '.pdf'), device = "pdf")
+
+
+
+# plot angles (plot angels, haha!)-------------------------------------------------------------
 
 
 plot(datae$start_angz, datae$pixel_angz)
@@ -104,6 +127,19 @@ plot(datae$start_angphi, datae$pixel_angphi)
 summary(datae)
 
 plot(datae$dE.keV, datae$start_angz)
+
+
+
+
+
+
+
+
+
+
+
+# all some other plots ----------------------------------------------------
+
 
 breaks.angle <- seq(0, 180, length.out = 180/5+1)
 breaks.dEdet3 <- seq(0, 5000, length.out = 30+1)
