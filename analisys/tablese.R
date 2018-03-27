@@ -31,8 +31,10 @@ datae<-read.csv(filename,col.names = header[[1]],  skip = 13)
 cat('\nData file name:', filename, ':', nrow(datae) )
 
 # подготовка исходных данных 2 -------------------------------------------------
-
-
+filename <- '05_MeV_facet_nt_signal_t0.csv'
+filename <- '3_MeV_facet_nt_signal_t0.csv'
+filename <- '6_MeV_facet_nt_signal_t0.csv'
+filename <- '7_MeV_facet_nt_signal_t0.csv'
 filename <- '9_MeV_facet_nt_signal_t0.csv'
 
 header <- strsplit("evtNb E0.keV layerNo pixelNo lineNo dE.keV start_angz start_angphi pixel_angz pixel_angphi", split = ' ')
@@ -46,6 +48,8 @@ cat('\nData file name:', filename, ':', nrow(datae) )
 
 plot(datae$start_angphi, datae$start_angz)
 names(datae)
+
+# angles on top of casing
 ggplot(data = datae)+
   geom_point(aes(x=start_angphi, y= start_angz))+
   # scale_x_continuous(breaks=c(0 , 6, 12, 18),
@@ -56,12 +60,39 @@ ggplot(data = datae)+
   theme_bw()+ theme(panel.grid.major = element_line(colour = "black"),
                     panel.grid.minor = element_line(colour = "black"))
 
+
+# angles on all detectors, deprecated!
 ggplot(data = datae)+
   geom_point(aes(x=pixel_angphi, y= pixel_angz))+
   ylim(0,90)+
   coord_polar(start = 0, direction = -1 )+ 
   theme_bw()+ theme(panel.grid.major = element_line(colour = "black"),
                     panel.grid.minor = element_line(colour = "black"))
+
+# angles on top detector
+ggplot(data = filter(datae, layerNo == 0))+
+  geom_point(aes(x=pixel_angphi, y= pixel_angz))+
+  ylim(0,90)+
+  coord_polar(start = 0, direction = -1 )+ 
+  theme_bw()+ theme(panel.grid.major = element_line(colour = "black"),
+                    panel.grid.minor = element_line(colour = "black"))
+
+# angles on middle detector
+ggplot(data = filter(datae, layerNo == 1))+
+  geom_point(aes(x=pixel_angphi, y= pixel_angz))+
+  ylim(0,90)+
+  coord_polar(start = 0, direction = -1 )+ 
+  theme_bw()+ theme(panel.grid.major = element_line(colour = "black"),
+                    panel.grid.minor = element_line(colour = "black"))
+
+# angles on bottom detector
+ggplot(data = filter(datae, layerNo == 2))+
+  geom_point(aes(x=pixel_angphi, y= pixel_angz))+
+  ylim(0,90)+
+  coord_polar(start = 0, direction = -1 )+ 
+  theme_bw()+ theme(panel.grid.major = element_line(colour = "black"),
+                    panel.grid.minor = element_line(colour = "black"))
+
 
 
 ggplot(data = datae)+
@@ -110,7 +141,7 @@ ggplot(data = filter(datae, evtNb == evtNumber), aes(x=pixelNo, y= lineNo)) +
 
 # draw track all layers --------------------------------------------------------
 ggplot(data = filter(datae, evtNb == evtNumber), aes(x=pixelNo, y= lineNo)) +
-  geom_tile(aes(fill =factor(layerNo), alpha = (dE.keV)))+
+  geom_tile(aes(fill =factor(layerNo), alpha = dE.keV))+
   coord_fixed(ratio = 1) #+ scale_fill_manual()
 
 ggsave(paste(evtNumber, '.pdf'), device = "pdf")
