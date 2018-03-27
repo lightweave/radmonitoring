@@ -20,9 +20,9 @@ ptm <- proc.time()
 
 # таблицы для Чирской фацет по сравнению корпусов  -----------------------------
 
+# tables facet - casing and telescope development  -----------------------------
 
-
-# подготовка исходных данных ---------------------------------------------------
+# data preparing ---------------------------------------------------
 
 filename <- 'facet_nt_signal_t0.csv'
 
@@ -30,7 +30,7 @@ header <- strsplit("evtNb E0.keV pixelNo lineNo dE.keV start_angz start_angphi p
 datae<-read.csv(filename,col.names = header[[1]],  skip = 13)
 cat('\nData file name:', filename, ':', nrow(datae) )
 
-# подготовка исходных данных 2 -------------------------------------------------
+# data preparing 2-------------------------------------------------
 filename <- '05_MeV_facet_nt_signal_t0.csv'
 filename <- '3_MeV_facet_nt_signal_t0.csv'
 filename <- '6_MeV_facet_nt_signal_t0.csv'
@@ -43,7 +43,7 @@ cat('\nData file name:', filename, ':', nrow(datae) )
 
 
 
-# отрисовка --------------------------------------------------------------------
+# plotting --------------------------------------------------------------------
 
 
 plot(datae$start_angphi, datae$start_angz)
@@ -98,26 +98,9 @@ ggplot(data = filter(datae, layerNo == 2))+
 ggplot(data = datae)+
   geom_bin2d(aes(x=pixelNo, y= lineNo))
 
-ggplot(data = datae)+
-  geom_bin2d(aes(x=pixelNo, y= lineNo, group = evtNb))
+
 ggplot(data = filter(datae), aes(x=pixelNo, y= lineNo)) +
   geom_tile()
-
-
-ggplot(data = filter(datae, evtNb == 528))+
-  geom_bin2d(aes(x=pixelNo, y= lineNo))
-
-
-for (evtNumber in unique(datae$evtNb))
-{
-  ggplot(data = filter(datae, evtNb == evtNumber), aes(x=pixelNo, y= lineNo)) +
-    geom_tile(aes(fill =  dE.keV)) +
-    coord_fixed(ratio = 1)
-  # specify device when saving to a file with unknown extension
-  # (for example a server supplied temporary file)
-  # ggsave(file, device = "pdf")
-  ggsave(file, device = "pdf")
-}
 
 
 
@@ -132,7 +115,7 @@ ggplot(data = filter(datae, evtNb == evtNumber), aes(x=pixelNo, y= lineNo)) +
   coord_fixed(ratio = 1)
 
 
-# draw track by layer ----------------------------------------------------------
+# draw track layer by layer ----------------------------------------------------
 ggplot(data = filter(datae, evtNb == evtNumber), aes(x=pixelNo, y= lineNo)) +
   geom_tile(data = filter(datae, evtNb == evtNumber & layerNo == 0), aes(fill =  dE.keV)) +
   geom_tile(data = filter(datae, evtNb == evtNumber & layerNo == 1), aes(fill =  dE.keV)) +
@@ -146,17 +129,26 @@ ggplot(data = filter(datae, evtNb == evtNumber), aes(x=pixelNo, y= lineNo)) +
 
 ggsave(paste(evtNumber, '.pdf'), device = "pdf")
 
+# plot each event separately ---------------------------------------------------
+for (evtNumber in unique(datae$evtNb))
+{
+  ggplot(data = filter(datae, evtNb == evtNumber), aes(x=pixelNo, y= lineNo)) +
+    geom_tile(aes(fill =  dE.keV)) +
+    coord_fixed(ratio = 1)
+  ggsave(paste(evtNumber, '.pdf'), device = "pdf")
+  
+  # specify device when saving to a file with unknown extension
+  # (for example a server supplied temporary file)
+  # ggsave(file, device = "pdf")
+}
 
-
-# plot angles (plot angels, haha!)-------------------------------------------------------------
-
-
-plot(datae$start_angz, datae$pixel_angz)
-
-plot(datae$start_angphi, datae$pixel_angphi)
-
+# plot angles (plot angels, haha!)----------------------------------------------
 summary(datae)
-
+#bad
+plot(datae$start_angz, datae$pixel_angz)
+#bad
+plot(datae$start_angphi, datae$pixel_angphi)
+#bad
 plot(datae$dE.keV, datae$start_angz)
 
 
