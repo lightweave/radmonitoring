@@ -19,10 +19,9 @@ setwd("D:/Ivan/_flash backup 2014/SINP/2017 Группировка/radmonitoring/analisys")
 ptm <- proc.time()
 
 # таблицы для Чирской фацет по сравнению корпусов  -----------------------------
-
 # tables facet - casing and telescope development  -----------------------------
 
-# data preparing ---------------------------------------------------
+# data preparing ---------------------------------------------------------------
 
 filename <- 'facet_nt_signal_t0.csv'
 
@@ -30,7 +29,7 @@ header <- strsplit("evtNb E0.keV pixelNo lineNo dE.keV start_angz start_angphi p
 datae<-read.csv(filename,col.names = header[[1]],  skip = 13)
 cat('\nData file name:', filename, ':', nrow(datae) )
 
-# data preparing 2-------------------------------------------------
+# data preparing 2--------------------------------------------------------------
 filename <- '05_MeV_facet_nt_signal_t0.csv'
 filename <- '3_MeV_facet_nt_signal_t0.csv'
 filename <- '6_MeV_facet_nt_signal_t0.csv'
@@ -43,15 +42,18 @@ cat('\nData file name:', filename, ':', nrow(datae) )
 
 
 
-# plotting --------------------------------------------------------------------
+# plot agles -------------------------------------------------------------------
 
+names(datae)
 
 plot(datae$start_angphi, datae$start_angz)
-names(datae)
+
+
 
 # angles on top of casing
 ggplot(data = datae)+
   geom_point(aes(x=start_angphi, y= start_angz))+
+  labs(title = filename)+
   # scale_x_continuous(breaks=c(0 , 6, 12, 18),
                      # minor_breaks = c(0:24),
                      # labels = c('00','06', '12', '18'))+
@@ -94,7 +96,7 @@ ggplot(data = filter(datae, layerNo == 2))+
                     panel.grid.minor = element_line(colour = "black"))
 
 
-
+#  draw all tracks--------------------------------------------------------------
 ggplot(data = datae)+
   geom_bin2d(aes(x=pixelNo, y= lineNo))
 
@@ -105,7 +107,7 @@ ggplot(data = filter(datae), aes(x=pixelNo, y= lineNo)) +
 
 
 
-# select single event -----------------------------------------------------
+# select single event ----------------------------------------------------------
 
 evtNumber <- select(sample_n(datae, 1), evtNb)[[1]]
 
@@ -142,7 +144,7 @@ for (evtNumber in unique(datae$evtNb))
   # ggsave(file, device = "pdf")
 }
 
-# plot angles (plot angels, haha!)----------------------------------------------
+# old plot angles (plot angels, haha!)----------------------------------------------
 summary(datae)
 #bad
 plot(datae$start_angz, datae$pixel_angz)
@@ -150,13 +152,6 @@ plot(datae$start_angz, datae$pixel_angz)
 plot(datae$start_angphi, datae$pixel_angphi)
 #bad
 plot(datae$dE.keV, datae$start_angz)
-
-
-
-
-
-
-
 
 
 
@@ -169,12 +164,6 @@ breaks.dEdet3 <- seq(0, 5000, length.out = 30+1)
 
 datae$bins.angle <- cut(as.numeric(datae$ang_z), breaks.angle)
 datae$bins.dE3 <- cut(as.numeric(datae$dE.det3), breaks.dEdet3)
-
-
-
-
-
-
 
 
 
@@ -203,7 +192,6 @@ print(cloud(n ~ bins.angle * bins.dE3, data = hist.n, panel.3d.cloud=panel.3dbar
             screen = list(z = 40, x = -30),
             par.settings = list(axis.line = list(col = "transparent")))
 )
-
 
 
 
