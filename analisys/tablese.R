@@ -10,7 +10,8 @@ library(dplyr)
 library(ggplot2)
 
 
-setwd("D:/Ivan/_flash backup 2014/SINP/2017 Группировка/radmonitoring/analisys")
+setwd("D:/Ivan/_flash backup 2014/SINP/Р“СЂСѓРїРїРёСЂРѕРІРєР°/2017 Р“СЂСѓРїРїРёСЂРѕРІРєР°/radmonitoring/analisys")
+ 
 
 
 
@@ -18,7 +19,7 @@ setwd("D:/Ivan/_flash backup 2014/SINP/2017 Группировка/radmonitoring/analisys")
 # Start the clock!
 ptm <- proc.time()
 
-# таблицы для Чирской фацет по сравнению корпусов  -----------------------------
+# С‚Р°Р±Р»РёС†С‹ РґР»СЏ Р§РёСЂСЃРєРѕР№ С„Р°С†РµС‚ РїРѕ СЃСЂР°РІРЅРµРЅРёСЋ РєРѕСЂРїСѓСЃРѕРІ  -----------------------------
 # tables facet - casing and telescope development  -----------------------------
 
 # data preparing ---------------------------------------------------------------
