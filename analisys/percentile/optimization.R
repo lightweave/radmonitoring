@@ -1,4 +1,12 @@
-setwd("d:/Simulink")
+library(readr)
+library(dplyr)
+library(ggplot2)
+
+
+getwd()
+setwd("D:/Ivan/_flash backup 2014/SINP/Группировка/2017 Группировка/radmonitoring/radmonitoring/analisys/percentile")
+
+
 
 # import data from Monte-Carlo text files
 data<-read.table("data/det2/electr_A_L32_det2.dat", header = TRUE)
