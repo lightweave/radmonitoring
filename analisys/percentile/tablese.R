@@ -9,8 +9,8 @@ library('dplyr')
 library('tidyr')
 
 # подготовка исходных данных
-setwd("D:/Simulink/report2")
-datae<-read.table("electrons_B.dat", header = TRUE)
+setwd("D:/Ivan/_flash backup 2014/SINP/Группировка/2017 Группировка/radmonitoring/radmonitoring/analisys/percentile")
+datae<-read.table("report2/electr_A_L14_det2.dat", header = TRUE)
 
 # загрузка тренировочного потока D ----------------------------------------
 
