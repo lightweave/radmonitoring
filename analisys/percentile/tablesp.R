@@ -9,7 +9,7 @@ setwd("D:/Simulink/report")
 
 getwd()
 setwd("D:/Ivan/_flash backup 2014/SINP/Группировка/2017 Группировка/radmonitoring/radmonitoring/analisys/percentile")
-
+list.files()
 
 # Start the clock!
 ptm <- proc.time()

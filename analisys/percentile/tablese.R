@@ -7,9 +7,10 @@ library('hexbin')
 library('readr')
 library('dplyr')
 library('tidyr')
-setwd("D:/Simulink/report2")
+
 # подготовка исходных данных
-# datae<-read.table("electrons_B.dat", header = TRUE)
+setwd("D:/Simulink/report2")
+datae<-read.table("electrons_B.dat", header = TRUE)
 
 # загрузка тренировочного потока D ----------------------------------------
 
@@ -39,7 +40,7 @@ least.thresholds = c(150, 120, 800, 200)
 datae$sumdE <- datae$dE.det1 + datae$dE.det2 + datae$dE.det3 + datae$dE.det4
 datae.fullAbsorption <- datae[(datae$E0.keV - datae$sumdE)/datae$E0.keV< 0.05,]
 plot(datae.fullAbsorption$sumdE ~ datae.fullAbsorption$E0.keV)
-# plot(datae.fullAbsorption$sumdE ~ datae.fullAbsorption$ang_z)
+#plot(datae.fullAbsorption$sumdE ~ datae.fullAbsorption$ang_z)
 
 # коллиматор---------------------------------------------------
 datae.collimator <- datae[datae$ang_z < 17,]
