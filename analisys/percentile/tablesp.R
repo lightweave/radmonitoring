@@ -9,6 +9,8 @@ setwd("D:/Simulink/report")
 
 getwd()
 setwd("D:/Ivan/_flash backup 2014/SINP/Группировка/2017 Группировка/radmonitoring/radmonitoring/analisys/percentile")
+setwd("D:/Ivan/_flash backup 2014/SINP/Группировка/2017 Группировка/radmonitoring/radmonitoring/analisys/percentile/report3")
+
 list.files()
 
 # Start the clock!
@@ -258,9 +260,12 @@ plotdEfromE4bwruBig <- function(data, main = "", orig, tab){
   axis(4)
   par(new=T)  
   plot(data$E0.keV,data$dE.det1,
-       main="детектор 1",
-       xlab="E0, кэВ",     
-       ylab="dE, кэВ",        
+       # main="детектор 1",
+       # xlab="E0, кэВ",     
+       # ylab="dE, кэВ",    
+       main="detector 1",
+       xlab="E0, keV",     
+       ylab="dE, keV",
        ylim=range(c(orig$dE.det1,data$dE.det1)),
        xlim=range(c(orig$E0.keV,data$E0.keV)),
        col= ifelse(data$ang_z < 17, color1,  color2),
@@ -273,10 +278,16 @@ plotdEfromE4bwruBig <- function(data, main = "", orig, tab){
        ybottom = tab[1,1],ytop = tab[2,1], border = color5)
   box()
   minor.tick(nx=0, ny=4, tick.ratio=0.5)
-  legend("topright", c("коллиматор", "корпус",
-                       "первичный поток в коллиматоре"
-                       #                        ,"поток ч/з корпус"
-  ), pch=c(markers1,markers2), 
+  legend("topright", 
+  #        c("коллиматор", "корпус",
+  #                      "первичный поток в коллиматоре"
+  #                      #                        ,"поток ч/з корпус"
+  # ), 
+  c("collimator selected", 
+    "casing selected",
+    "collimator original",
+    "casing original"),
+  pch=c(markers1,markers2), 
   cex=.8, col=c(color1,  color2, color3,  color4))
   
   par(mar=c(5.1,0.1,4.1,2.1))
@@ -302,9 +313,9 @@ plotdEfromE4bwruBig <- function(data, main = "", orig, tab){
   plot(data$E0.keV,data$dE.det2,
        ylim=range(c(orig$dE.det2,data$dE.det2)),
        xlim=range(c(orig$E0.keV,data$E0.keV)),
-       main="детектор 2",
-       xlab="E0, кэВ",     
-       ylab="dE, кэВ", 
+       main="detector 2",
+       xlab="E0, keV",     
+       ylab="dE, keV",
        col= ifelse(data$ang_z < 17, color1,  color2),
        pch = ifelse(data$ang_z < 17, markers1[1],markers1[2]))
   
@@ -335,9 +346,9 @@ plotdEfromE4bwruBig <- function(data, main = "", orig, tab){
   plot(data$E0.keV,data$dE.det3,
        ylim=range(c(orig$dE.det3,data$dE.det3)),
        xlim=range(c(orig$E0.keV,data$E0.keV)),
-       main="детектор 3",
-       xlab="E0, кэВ",     
-       ylab="dE, кэВ", 
+       main="detector 3",
+       xlab="E0, keV",     
+       ylab="dE, keV",
        col= ifelse(data$ang_z < 17, color1,  color2),
        pch = ifelse(data$ang_z < 17, markers1[1],markers1[2]))
   minor.tick(nx=0, ny=4, tick.ratio=0.5)
@@ -369,9 +380,9 @@ plotdEfromE4bwruBig <- function(data, main = "", orig, tab){
   plot(data$E0.keV,data$dE.det4,
        ylim=range(c(orig$dE.det4,data$dE.det4)),
        xlim=range(c(orig$E0.keV,data$E0.keV)),
-       main="детектор 4",
-       xlab="E0, кэВ",     
-       ylab="dE, кэВ", 
+       main="detector 4",
+       xlab="E0, keV",     
+       ylab="dE, keV", 
        col= ifelse(data$ang_z < 17, color1,  color2),
        pch = ifelse(data$ang_z < 17, markers1[1],markers1[2]))
   minor.tick(nx=0, ny=4, tick.ratio=0.5)
@@ -393,15 +404,19 @@ plotdEfromE4bwruBig <- function(data, main = "", orig, tab){
              , signif(dole, digits = 2) ,sep = " ")
   mtext(a, side=1, outer=TRUE, line=-3, cex=0.8)
   
-  sensetivity <- nrow(data)/nrow(orig)
+  # sensetivity <- nrow(data)/nrow(orig)
+  sensetivity <- nrow(data[(data$E0.keV >= min(orig$E0.keV)) &
+                             (data$E0.keV <= max(orig$E0.keV)),])/nrow(orig)
   a<-  paste("Чувствительность(геометрический фактор):"# числа боковых зарегистрированных пролетов к числу пролетов через коллиматор: 
              , signif(sensetivity, digits = 2) ,sep = " ")
   mtext(a, side=1, outer=TRUE, line=-2, cex=0.8)
   
-  selectivity <- nrow(data[(data$E0.keV >= min(orig$E0.keV)) &
-                             (data$E0.keV <= max(orig$E0.keV)),])/nrow(data)
-  a<-  paste("Селективность(количество правильно определенных частиц):"# числа боковых зарегистрированных пролетов к числу пролетов через коллиматор: 
-             , signif(selectivity, digits = 2) ,sep = " ")
+  # selectivity <- nrow(data[(data$E0.keV >= min(orig$E0.keV)) &
+  #                            (data$E0.keV <= max(orig$E0.keV)),])/nrow(data)
+  precision <- nrow(data[(data$E0.keV >= min(orig$E0.keV)) &
+                           (data$E0.keV <= max(orig$E0.keV)),])/nrow(data)
+  a<-  paste("Точность(количество правильно определенных частиц):"# числа боковых зарегистрированных пролетов к числу пролетов через коллиматор: 
+             , signif(precision, digits = 2) ,sep = " ")
   mtext(a, side=1, outer=TRUE, line=-1, cex=0.8)
   
   #   dole <- nrow(orig[(orig$ang_z < 17),])/nrow(orig[(orig$ang_z >= 17),])
@@ -521,17 +536,17 @@ plotChannelSide <- function( tab, n){
 savePlotCannel <- function(n=1){
   
   ppi <- 300
-  png(paste("proton",n,casing,"classic.png", sep=""), width=6*ppi, height=6*ppi, res=ppi)
+  png(paste("proton",n,casing,"classicen.png", sep=""), width=6*ppi, height=6*ppi, res=ppi)
   # pdf(paste("proton",n,casing,"classic.pdf", sep=""))
   plotChannelSide(table.classic[[n]], n)
   dev.off()
   
-  png(paste("proton",n,casing,"2575.png", sep=""), width=6*ppi, height=6*ppi, res=ppi)
+  png(paste("proton",n,casing,"2575en.png", sep=""), width=6*ppi, height=6*ppi, res=ppi)
   # pdf(paste("proton",n,casing,"classic.pdf", sep=""))
   plotChannelSide(table.2575[[n]], n)  
   dev.off()
   
-  png(paste("proton",n,casing,"595.png", sep=""), width=6*ppi, height=6*ppi, res=ppi)
+  png(paste("proton",n,casing,"595en.png", sep=""), width=6*ppi, height=6*ppi, res=ppi)
   # pdf(paste("proton",n,casing,"classic.pdf", sep=""))
   plotChannelSide(table.595[[n]], n)
   dev.off()

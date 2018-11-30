@@ -1,0 +1,6 @@
+install.packages("devtools")
+library("devtools")
+devtools::install_github("klutometis/roxygen")
+library(roxygen2)
+setwd("D:\Ivan\_flash backup 2014\SINP\Группировка\2017 Группировка\radmonitoring\radmonitoring\analisys\percentile")
+create("cats")

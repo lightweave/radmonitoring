@@ -11,7 +11,9 @@ library('tidyr')
 # подготовка исходных данных
 setwd("D:/Ivan/_flash backup 2014/SINP/Группировка/2017 Группировка/radmonitoring/radmonitoring/analisys/percentile")
 datae<-read.table("report2/electr_A_L14_det2.dat", header = TRUE)
-
+casing <-'Aold'
+datae<-read.table("report3/electrons_A_det2.dat", header = TRUE)
+casing <-'A'
 # загрузка тренировочного потока D ----------------------------------------
 
 
@@ -39,8 +41,9 @@ least.thresholds = c(150, 120, 800, 200)
 # полное энерговыделение в детекторах прибора---------------
 datae$sumdE <- datae$dE.det1 + datae$dE.det2 + datae$dE.det3 + datae$dE.det4
 datae.fullAbsorption <- datae[(datae$E0.keV - datae$sumdE)/datae$E0.keV< 0.05,]
+plot(datae$sumdE ~ datae$E0.keV)
 plot(datae.fullAbsorption$sumdE ~ datae.fullAbsorption$E0.keV)
-#plot(datae.fullAbsorption$sumdE ~ datae.fullAbsorption$ang_z)
+plot(datae.fullAbsorption$sumdE ~ datae.fullAbsorption$ang_z)
 
 # коллиматор---------------------------------------------------
 datae.collimator <- datae[datae$ang_z < 17,]
@@ -214,7 +217,7 @@ table.595 <- by(datae.fullAbsorption, datae.fullAbsorption[,"bins"], GetThreshol
 # table.595 <- by(datae.fullAbsorption, datae.fullAbsorption[,"bins"], GetThresholds,  quant = 5)
 
 # есть таблица!
-table.595<-table.595[-1]
+# table.595<-table.595[-1]
 # выполняем округление до десятков кэВ
 table.595 <- lapply(table.595, round, -1)
 print(table.595) 
@@ -224,64 +227,49 @@ print(table.595)
 # table.2575 <- by(datae.collimator, datae.collimator[,"bins"], GetThresholds,  quant = 25)
 table.2575 <- by(datae.fullAbsorption, datae.fullAbsorption[,"bins"], GetThresholds,  quant = 25)
 # table.2575 <- by(datae.fullAbsorption, datae.fullAbsorption[,"bins"], GetThresholds,  quant = 25)
-table.2575<-table.2575[-1]
+# table.2575<-table.2575[-1]
 # выполняем округление до десятков кэВ
 table.2575 <- lapply(table.2575, round, -1)
 print(table.2575)  
 
 # classics ----------------------------------------------------------------
 GetClassicsThresholds <- function( ){
-  p1 <- matrix(c(150,2200,120,3300,0,800,0,200), ncol=4)
-  colnames(p1) <- c("dE.det1","dE.det2","dE.det3","dE.det4")
-  rownames(p1) <- c("low","high")
-  p1 <- as.table(p1)
-  ##########################################################
-  p2 <- matrix(c(150,1000,3300,9000,0,1800,0,2000), ncol=4)
-  colnames(p2) <- c("dE.det1","dE.det2","dE.det3","dE.det4")
-  rownames(p2) <- c("low","high")
-  p2 <- as.table(p2)
-  ##########################################################
-  p3 <- matrix(c(0,Inf,3300,9000,1800,10000,0,200), ncol=4)
-  colnames(p3) <- c("dE.det1","dE.det2","dE.det3","dE.det4")
-  rownames(p3) <- c("low","high")
-  p3 <- as.table(p3)
-  ##########################################################
-  p4 <- matrix(c(0,Inf,1700,3300,10000,28000,0,200), ncol=4)
-  colnames(p4) <- c("dE.det1","dE.det2","dE.det3","dE.det4")
-  rownames(p4) <- c("low","high")
-  p4 <- as.table(p4)
-  ##########################################################
-  p5 <- matrix(c(0,Inf,1000,1700,28000,Inf,0,200), ncol=4)
-  colnames(p5) <- c("dE.det1","dE.det2","dE.det3","dE.det4")
-  rownames(p5) <- c("low","high")
-  p5 <- as.table(p5)
-  ##########################################################
-  p6 <- matrix(c(0,Inf,600,1000,28000,Inf,0,200), ncol=4)
-  colnames(p6) <- c("dE.det1","dE.det2","dE.det3","dE.det4")
-  rownames(p6) <- c("low","high")
-  p6 <- as.table(p6)
-  ##########################################################
-  p7 <- matrix(c(0,Inf,300,1000,10000,28000,1000,Inf), ncol=4)
-  colnames(p7) <- c("dE.det1","dE.det2","dE.det3","dE.det4")
-  rownames(p7) <- c("low","high")
-  p7 <- as.table(p7)
-  ##########################################################
-  p8 <- matrix(c(500,2200,0,Inf,0,Inf,0,Inf), ncol=4)
-  colnames(p8) <- c("dE.det1","dE.det2","dE.det3","dE.det4")
-  rownames(p8) <- c("low","high")
-  p8 <- as.table(p8)
-  ##########################################################
-  # print(table.classic)
-  table.classic <- list(p1,p2,p3,p4,p5,p6,p7,p8)
-  # table.classic<- vector(mode = "list", length = 8)
-  # table.classic[[1]] <- p1;
-  # table.classic[[2]] <- p2;
-  # table.classic[[3]] <- p3;
-  # table.classic[[4]] <- p4;
-  # table.classic[[5]] <- p5;
-  # table.classic[[6]] <- p6;
-  # table.classic[[7]] <- p7;
-  # table.classic[[8]] <- p8;
+  e1 <- matrix(c(150, Inf, 120, 350, 0, 800, 0, Inf), ncol=4)
+  colnames(e1) <- c("dE.det1","dE.det2","dE.det3","dE.det4")
+  rownames(e1) <- c("low","high")
+  e1 <- as.table(e1)
+  
+  
+  e2 <- matrix(c(0,	150,	350,	500,	0,	800,	0,	Inf), ncol=4)
+  colnames(e2) <- c("dE.det1","dE.det2","dE.det3","dE.det4")
+  rownames(e2) <- c("low","high")
+  e2 <- as.table(e2)
+  
+  
+  e3 <- matrix(c(0,	150,	500,	800,	0,	800,	0,	Inf), ncol=4)
+  colnames(e3) <- c("dE.det1","dE.det2","dE.det3","dE.det4")
+  rownames(e3) <- c("low","high")
+  e3 <- as.table(e3)
+  
+  
+  e4 <- matrix(c(0,	150,	120,	500,	800,	2000,	0,	200), ncol=4)
+  colnames(e4) <- c("dE.det1","dE.det2","dE.det3","dE.det4")
+  rownames(e4) <- c("low","high")
+  e4 <- as.table(e4)
+  
+  
+  e5 <- matrix(c(0,	150,	120,	500,	2000,	4000,	0,	200), ncol=4)
+  colnames(e5) <- c("dE.det1","dE.det2","dE.det3","dE.det4")
+  rownames(e5) <- c("low","high")
+  e5 <- as.table(e5)
+  
+  
+  e6 <- matrix(c(0,	150,	120,	500,	4000,	10000,	0,	200), ncol=4)
+  colnames(e6) <- c("dE.det1","dE.det2","dE.det3","dE.det4")
+  rownames(e6) <- c("low","high")
+  e6 <- as.table(e6)
+  
+  table.classic <- list(e1,e2,e3,e4,e5,e6)
   # print(table.classic)
   return(table.classic)
 }
@@ -292,14 +280,24 @@ print(table.classic)
 # save tables -------------------------------------------------------------
 
 
-sink("table595.txt")
+sink("table595.elec.txt")
 print(table.595)
 sink()
-sink("table2575.txt")
+sink("table2575.elec.txt")
 print(table.2575)
 sink()
-table.595 <- read.delim("table595.txt")
+sink("table.classic.elec.txt")
+print(table.classic)
+sink()
 
+
+setwd("D:/Ivan/_flash backup 2014/SINP/Группировка/2017 Группировка/radmonitoring/radmonitoring/analisys/percentile")
+
+table.classic <- read.delim("table.classic.elec.txt")
+table.595 <- read.table("table595.elec.txt")
+table.2575 <- read.delim("table2575.elec.txt")
+
+table.595.t <- as.table(table.595)
 # decision tree analisys --------------------------------------------------
 
 
@@ -311,6 +309,7 @@ datae.fullAbsorption.sample <- datae.fullAbsorption[(datae.fullAbsorption$bins!=
 plot(table(datae.fullAbsorption.sample$bins))
 fit <- rpart(bins ~ dE.det1 + dE.det2 + dE.det3 + dE.det4,
              method="class", data=datae.fullAbsorption.sample)
+print(fit) 
 printcp(fit) # display the results 
 plotcp(fit) # visualize cross-validation results 
 summary(fit) # detailed summary of splits
@@ -321,15 +320,56 @@ plot(fit, uniform=TRUE,
 text(fit, use.n=TRUE, all=TRUE, cex=.8)
 
 
-datae.newdata<-datae[(datae$bins!='e0'),]
+datae.newdata<-na.omit(datae[(datae$bins!='e0'),])
 p <- predict(fit, datae.newdata, type = "class")
+
+datae.newdata$bins.tree <- p
+
+summary(p)
+plot(p)
+plot(datae.newdata$bins)
 
 plot(table(p))
 plot(table(datae.newdata$bins))
+
 boxplot(datae.newdata$E0.keV~p)
+density(datae.newdata$E0.keV~p)
+
+plot(data = datae.newdata,bins~bins.tree)
+
+# Violin Plots
+library(vioplot)
+x1 <- mtcars$mpg[mtcars$cyl==4]
+x2 <- mtcars$mpg[mtcars$cyl==6]
+x3 <- mtcars$mpg[mtcars$cyl==8]
+vioplot(x1, x2, x3, names=c("4 cyl", "6 cyl", "8 cyl"), 
+        col="gold")
+title("Violin Plots of Miles Per Gallon")
 
 
-# Quantile Regression -----------------------------------------------------
+vioplot(datae.newdata$E0.keV[datae.newdata$bins.tree=='e1'],
+        datae.newdata$E0.keV[datae.newdata$bins.tree=='e2'],
+        datae.newdata$E0.keV[datae.newdata$bins.tree=='e3'],
+        datae.newdata$E0.keV[datae.newdata$bins.tree=='e4'],
+        datae.newdata$E0.keV[datae.newdata$bins.tree=='e5'],
+        names=c("e1", "e2", "e3", "e4","e5"), 
+        col="gold")
+
+
+# Conditional Inference Tree for Kyphosis------------------------------
+# what is 
+library(party)
+fit <- ctree(bins ~ dE.det1 + dE.det2 + dE.det3 + dE.det4,
+             data=na.omit(datae.fullAbsorption))
+plot(fit, main="Conditional Inference Tree for Kyphosis")
+p <- predict(fit, datae.newdata)
+datae.newdata$bins.tree <- p
+summary(datae.newdata)
+
+plot(data = datae.newdata,E0.keV~bins.tree)
+
+
+# Median Regression (Quantile Regression)  -----------------------------------------------------
 install.packages("quantreg")
 library(quantreg)
 qs <- 1:9/10
@@ -387,7 +427,8 @@ predict.percent <- function(data,  orig, tab){
 # 5-95 25-75 и классики
 
 plotdEfromE4bwruBig <- function(data, main = "", orig, tab){
-  
+  # data <- channel
+  # orig<-electron
   layout(matrix(rep(1:12), 3, 4, byrow = TRUE), 
          widths=c(3,1,3,1),
          heights=c(4,4,1)
@@ -406,19 +447,22 @@ plotdEfromE4bwruBig <- function(data, main = "", orig, tab){
   
   par(mar=c(5.1,4.1,4.1,0.1))  
   plot(orig$E0.keV,orig$dE.det1, 
-       ylim=range(c(orig$dE.det1,data$dE.det1)),
-       xlim=range(c(orig$E0.keV,data$E0.keV)),
+       ylim=range(c(na.omit(orig$dE.det1),na.omit(data$dE.det1))),
+       xlim=range(c(na.omit(orig$E0.keV),na.omit(data$E0.keV))),
        axes=TRUE,ann=FALSE,       
        col= ifelse(orig$ang_z < 17, color3,  color4),
        pch = ifelse(orig$ang_z < 17, markers2[1],markers2[2]))
   axis(4)
   par(new=T)  
   plot(data$E0.keV,data$dE.det1,
-       main="детектор 1",
-       xlab="E0, кэВ",     
-       ylab="dE, кэВ",        
-       ylim=range(c(orig$dE.det1,data$dE.det1)),
-       xlim=range(c(orig$E0.keV,data$E0.keV)),
+       # main="детектор 1",
+       # xlab="E0, кэВ",     
+       # ylab="dE, кэВ", 
+       main="detector 1",
+       xlab="E0, keV",     
+       ylab="dE, keV",
+       ylim=range(c(na.omit(orig$dE.det1),na.omit(data$dE.det1))),
+       xlim=range(c(na.omit(orig$E0.keV),na.omit(data$E0.keV))),
        col= ifelse(data$ang_z < 17, color1,  color2),
        pch = ifelse(data$ang_z < 17, markers1[1],markers1[2]))
   #   axis(1, 900:2000)
@@ -429,11 +473,15 @@ plotdEfromE4bwruBig <- function(data, main = "", orig, tab){
        ybottom = tab[1,1],ytop = tab[2,1], border = color5)
   box()
   minor.tick(nx=0, ny=4, tick.ratio=0.5)
-  legend("topright", c("коллиматор отбор", "корпус отбор",
-                       "первичный поток в коллиматоре",
-                       "первичный поток ч/з корпус"
-  ), pch=c(markers1,markers2), 
-  cex=.8, col=c(color1,  color2, color3,  color4))
+  legend("topright", 
+         # c("коллиматор отбор", "корпус отбор",
+         #               "первичный поток в коллиматоре",
+         #               "первичный поток ч/з корпус"),
+         c("collimator classif", "casing ",
+           "collimator",
+           "casing"),
+         pch=c(markers1,markers2), 
+         cex=.8, col=c(color1,  color2, color3,  color4))
   
   par(mar=c(5.1,0.1,4.1,2.1))
   boxplot(orig$dE.det1~orig$dE.det1>150,  axes=FALSE,   varwidth=T)
@@ -448,19 +496,23 @@ plotdEfromE4bwruBig <- function(data, main = "", orig, tab){
   
   par(mar=c(5.1,4.1,4.1,0.1))
   plot(orig$E0.keV,orig$dE.det2, 
-       ylim=range(c(orig$dE.det2,data$dE.det2)),
-       xlim=range(c(orig$E0.keV,data$E0.keV)),
+       ylim=range(c(na.omit(orig$dE.det2),na.omit(data$dE.det2))),
+       xlim=range(c(na.omit(orig$E0.keV),na.omit(data$E0.keV))),
+       # ylim=range(c(orig$dE.det2,data$dE.det2)),
+       # xlim=range(c(orig$E0.keV,data$E0.keV)),
        axes=FALSE,ann=FALSE,       
        col= ifelse(orig$ang_z < 17, color3,  color4),
        pch = ifelse(orig$ang_z < 17, markers2[1],markers2[2]))
   axis(4)
   par(new=T)
   plot(data$E0.keV,data$dE.det2,
-       ylim=range(c(orig$dE.det2,data$dE.det2)),
-       xlim=range(c(orig$E0.keV,data$E0.keV)),
-       main="детектор 2",
-       xlab="E0, кэВ",     
-       ylab="dE, кэВ", 
+       ylim=range(c(na.omit(orig$dE.det2),na.omit(data$dE.det2))),
+       xlim=range(c(na.omit(orig$E0.keV),na.omit(data$E0.keV))),
+       # ylim=range(c(orig$dE.det2,data$dE.det2)),
+       # xlim=range(c(orig$E0.keV,data$E0.keV)),
+       main="detector 2",
+       xlab="E0, keV",     
+       ylab="dE, keV", 
        col= ifelse(data$ang_z < 17, color1,  color2),
        pch = ifelse(data$ang_z < 17, markers1[1],markers1[2]))
   
@@ -481,19 +533,23 @@ plotdEfromE4bwruBig <- function(data, main = "", orig, tab){
   
   par(mar=c(5.1,4.1,4.1,0.1))
   plot(orig$E0.keV,orig$dE.det3, 
-       ylim=range(c(orig$dE.det3,data$dE.det3)),
-       xlim=range(c(orig$E0.keV,data$E0.keV)),
+       ylim=range(c(na.omit(orig$dE.det3),na.omit(data$dE.det3))),
+       xlim=range(c(na.omit(orig$E0.keV),na.omit(data$E0.keV))),
+       # ylim=range(c(orig$dE.det3,data$dE.det3)),
+       # xlim=range(c(orig$E0.keV,data$E0.keV)),
        axes=FALSE,ann=FALSE,       
        col= ifelse(orig$ang_z < 17, color3,  color4),
        pch = ifelse(orig$ang_z < 17, markers2[1],markers2[2]))
   axis(4)
   par(new=T)
   plot(data$E0.keV,data$dE.det3,
-       ylim=range(c(orig$dE.det3,data$dE.det3)),
-       xlim=range(c(orig$E0.keV,data$E0.keV)),
-       main="детектор 3",
-       xlab="E0, кэВ",     
-       ylab="dE, кэВ", 
+       ylim=range(c(na.omit(orig$dE.det3),na.omit(data$dE.det3))),
+       xlim=range(c(na.omit(orig$E0.keV),na.omit(data$E0.keV))),
+       # ylim=range(c(orig$dE.det3,data$dE.det3)),
+       # xlim=range(c(orig$E0.keV,data$E0.keV)),
+       main="detector 3",
+       xlab="E0, keV",     
+       ylab="dE, keV", 
        col= ifelse(data$ang_z < 17, color1,  color2),
        pch = ifelse(data$ang_z < 17, markers1[1],markers1[2]))
   minor.tick(nx=0, ny=4, tick.ratio=0.5)
@@ -515,19 +571,23 @@ plotdEfromE4bwruBig <- function(data, main = "", orig, tab){
   
   par(mar=c(5.1,4.1,4.1,0.1))
   plot(orig$E0.keV,orig$dE.det4, 
-       ylim=range(c(orig$dE.det4,data$dE.det4)),
-       xlim=range(c(orig$E0.keV,data$E0.keV)),
+       ylim=range(c(na.omit(orig$dE.det4),na.omit(data$dE.det4))),
+       xlim=range(c(na.omit(orig$E0.keV),na.omit(data$E0.keV))),
+       # ylim=range(c(orig$dE.det4,data$dE.det4)),
+       # xlim=range(c(orig$E0.keV,data$E0.keV)),
        axes=FALSE,ann=FALSE,       
        col= ifelse(orig$ang_z < 17, color3,  color4),
        pch = ifelse(orig$ang_z < 17, markers2[1],markers2[2]))
   axis(4)
   par(new=T)
   plot(data$E0.keV,data$dE.det4,
-       ylim=range(c(orig$dE.det4,data$dE.det4)),
-       xlim=range(c(orig$E0.keV,data$E0.keV)),
-       main="детектор 4",
-       xlab="E0, кэВ",     
-       ylab="dE, кэВ", 
+       ylim=range(c(na.omit(orig$dE.det4),na.omit(data$dE.det4))),
+       xlim=range(c(na.omit(orig$E0.keV),na.omit(data$E0.keV))),
+       # ylim=range(c(orig$dE.det4,data$dE.det4)),
+       # xlim=range(c(orig$E0.keV,data$E0.keV)),
+       main="detector 4",
+       xlab="E0, keV",     
+       ylab="dE, keV", 
        col= ifelse(data$ang_z < 17, color1,  color2),
        pch = ifelse(data$ang_z < 17, markers1[1],markers1[2]))
   minor.tick(nx=0, ny=4, tick.ratio=0.5)
@@ -577,15 +637,20 @@ plotdEfromE4bwruBig <- function(data, main = "", orig, tab){
              sep = " ")
   mtext(a, side=1, outer=TRUE, line=-3, cex=0.8)
   
-  sensetivity <- nrow(data)/nrow(orig)
+  sensetivity <- nrow(data[(data$E0.keV >= min(orig$E0.keV)) &
+                             (data$E0.keV <= max(orig$E0.keV)),])/nrow(orig)
   a<-  paste("Чувствительность(геометрический фактор):"# числа боковых зарегистрированных пролетов к числу пролетов через коллиматор: 
              , signif(sensetivity, digits = 2) ,sep = " ")
   mtext(a, side=1, outer=TRUE, line=-2, cex=0.8)
   
-  selectivity <- nrow(data[(data$E0.keV >= min(orig$E0.keV)) &
+  precision <- nrow(data[(data$E0.keV >= min(orig$E0.keV)) &
                              (data$E0.keV <= max(orig$E0.keV)),])/nrow(data)
-  a<-  paste("Селективность(количество правильно определенных частиц):"# числа боковых зарегистрированных пролетов к числу пролетов через коллиматор: 
-             , signif(selectivity, digits = 2) ,sep = " ")
+  a<-  paste("Точность(количество правильно определенных частиц):"# числа боковых зарегистрированных пролетов к числу пролетов через коллиматор: 
+             , signif(precision, digits = 2) , " = ",
+             nrow(data[(data$E0.keV >= min(orig$E0.keV)) &
+                         (data$E0.keV <= max(orig$E0.keV)),]),'/',
+             nrow(data),
+             sep = " ")
   mtext(a, side=1, outer=TRUE, line=-1, cex=0.8)
   
   #   dole <- nrow(orig[(orig$ang_z < 17),])/nrow(orig[(orig$ang_z >= 17),])
@@ -652,16 +717,19 @@ plotdEfromE4bwruBig1 <- function(data, main = "", orig, tab){
   a<-  paste("В отобранных событиях коллиматор/боковые:"
              , signif(dole, digits = 2) ,sep = " ")
   mtext(a, side=1, outer=TRUE, line=-3, cex=0.8)
-  # числа боковых зарегистрированных пролетов к числу пролетов через коллиматор: 
-  sensetivity <- nrow(data)/nrow(orig)
+  # 
+  # sensetivity <- nrow(data)/nrow(orig)
+  
+  sensetivity <- nrow(data[(data$E0.keV >= min(orig$E0.keV)) &
+                             (data$E0.keV <= max(orig$E0.keV)),])/nrow(orig)
   a<-  paste("Чувствительность(геометрический фактор):"
              , signif(sensetivity, digits = 2) ,sep = " ")
   mtext(a, side=1, outer=TRUE, line=-2, cex=0.8)
-  # числа боковых зарегистрированных пролетов к числу пролетов через коллиматор:   
-  selectivity <- nrow(data[(data$E0.keV >= min(orig$E0.keV)) &
+  #  
+  precision <- nrow(data[(data$E0.keV >= min(orig$E0.keV)) &
                              (data$E0.keV <= max(orig$E0.keV)),])/nrow(data)
   a<-  paste("Селективность(количество правильно определенных частиц):"
-             , signif(selectivity, digits = 2) ,sep = " ")
+             , signif(precision, digits = 2) ,sep = " ")
   mtext(a, side=1, outer=TRUE, line=-1, cex=0.8)
   
   
@@ -688,37 +756,40 @@ plotChannel <- function( tab, n){
 }
 plotChannelSide <- function( tab, n){
   
-  #   proton<-datae[((datae$ang_z < 17) & (datae$bins == paste("p", n, sep=""))), ]
-  proton<-datae[( (datae$bins == paste("e", n, sep=""))), ]
+  #   electron<-datae[((datae$ang_z < 17) & (datae$bins == paste("p", n, sep=""))), ]
+  electron<-datae[( (datae$bins == paste("e", n, sep=""))), ]
   
   channel<-datae[((datae$dE.det1 >= tab[1,1]) & datae$dE.det1 <= tab[2,1])& 
                    ((datae$dE.det2 >= tab[1,2]) & datae$dE.det2 <= tab[2,2])& 
                    ((datae$dE.det3 >= tab[1,3]) & datae$dE.det3 <= tab[2,3])& 
                    ((datae$dE.det4 >= tab[1,4]) & datae$dE.det4 <= tab[2,4]),]
   
-  main = paste("Канал",n,":",round(min(proton$E0.keV), -1),round(max(proton$E0.keV), -1),
+  main = paste("Канал",n,":",round(min(na.omit(electron$E0.keV)), -1),round(max(na.omit(electron$E0.keV)), -1),
                "Отбор:", deparse(substitute(tab)),
                "Корпус",casing, sep = " ")
   
-  plotdEfromE4bwruBig(channel, main, proton, tab)
+  plotdEfromE4bwruBig(channel, main, electron, tab)
   
 }
+
 savePlotCannel <- function(n=1){
-  
+  getwd()
+  setwd("D:/Ivan/_flash backup 2014/SINP/Группировка/2017 Группировка/radmonitoring/radmonitoring/analisys/percentile/report3")
   ppi <- 600
-  
-  # png(paste("electron",n,casing,"classic.png", sep=""), width=6*ppi, height=6*ppi, res=ppi)
-  # # pdf(paste("proton",n,casing,"classic.pdf", sep=""))
-  # plotChannelSide(table.classic[[n]], n)
-  # dev.off()
-  
-  png(paste("electron",n,casing,"2575.png", sep=""), width=6*ppi, height=6*ppi, res=ppi)
+  # n <-1
+  png(paste("electron",n,casing,"classicen.png", sep=""), width=6*ppi, height=6*ppi, res=ppi)
   # pdf(paste("proton",n,casing,"classic.pdf", sep=""))
-  plotChannelSide(table.2575[[n]], n) 
+  # tab <-table.classic[[n]]
+  plotChannelSide(table.classic[[n]], n)
   dev.off()
   
-  png(paste("electron",n,casing,"595.png", sep=""), width=6*ppi, height=6*ppi, res=ppi)
-  # pdf(paste("proton",n,casing,"classic.pdf", sep=""))
+  png(paste("electron",n,casing,"2575en.png", sep=""), width=6*ppi, height=6*ppi, res=ppi)
+  # # pdf(paste("proton",n,casing,"classic.pdf", sep=""))
+  plotChannelSide(table.2575[[n]], n)
+  dev.off()
+  
+  png(paste("electron",n,casing,"595en.png", sep=""), width=6*ppi, height=6*ppi, res=ppi)
+  # # pdf(paste("proton",n,casing,"classic.pdf", sep=""))
   plotChannelSide(table.595[[n]], n)
   dev.off()
 }
@@ -728,30 +799,33 @@ for (i in 1:8)
   savePlotCannel(i)
 
 # тест с другими корпусами ------------------------------------------------
-
+getwd()
+setwd("D:/Ivan/_flash backup 2014/SINP/Группировка/2017 Группировка/radmonitoring/radmonitoring/analisys/percentile/report3")
 casing <-'A'
 datae<-read.table(paste("electrons_",casing,".dat", sep=''), header = TRUE)
 datae$bins <- cut(datae$E0.keV, breaks, labels= labels)
 # строим гистограмму энергии в каждом канале
-for (i in 1:5)
+for (i in 1:6)
   savePlotCannel(i)
 casing <-'B'
 datae<-read.table(paste("electrons_",casing,".dat", sep=''), header = TRUE)
 datae$bins <- cut(datae$E0.keV, breaks, labels= labels)
 # строим гистограмму энергии в каждом канале
-for (i in 1:5)
+for (i in 1:6)
   savePlotCannel(i)
 casing <-'C'
 datae<-read.table(paste("electrons_",casing,".dat", sep=''), header = TRUE)
 datae$bins <- cut(datae$E0.keV, breaks, labels= labels)
 # строим гистограмму энергии в каждом канале
-for (i in 1:5)
+for (i in 1:6)
   savePlotCannel(i)
 casing <-'D'
 datae<-read.table(paste("electrons_",casing,".dat", sep=''), header = TRUE)
+
 datae$bins <- cut(datae$E0.keV, breaks, labels= labels)
+datae <- na.omit(datae)
 # строим гистограмму энергии в каждом канале
-for (i in 1:5)
+for (i in 1:6)
   savePlotCannel(i)
 
 

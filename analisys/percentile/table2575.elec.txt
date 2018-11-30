@@ -1,0 +1,30 @@
+$e1
+    dE.det1 dE.det2 dE.det3 dE.det4
+25%       0     120       0       0
+75%     150     250     800     200
+
+$e2
+    dE.det1 dE.det2 dE.det3 dE.det4
+25%       0     360       0       0
+75%     150     460     800     200
+
+$e3
+    dE.det1 dE.det2 dE.det3 dE.det4
+25%       0     200       0       0
+75%     150     630     800     200
+
+$e4
+    dE.det1 dE.det2 dE.det3 dE.det4
+25%       0     150     880       0
+75%     150     240    1400     200
+
+$e5
+    dE.det1 dE.det2 dE.det3 dE.det4
+25%       0       0    2040       0
+75%     150     180    2780     200
+
+$e6
+    dE.det1 dE.det2 dE.det3 dE.det4
+25%       0       0    4140       0
+75%     150     260    4550     200
+
