@@ -1,0 +1,7 @@
+/home/local1/work/Telescope_tulupov/Telescope-build/CMakeFiles/edit_cache.dir
+/home/local1/work/Telescope_tulupov/Telescope-build/CMakeFiles/rebuild_cache.dir
+/home/local1/work/Telescope_tulupov/Telescope-build/CMakeFiles/list_install_components.dir
+/home/local1/work/Telescope_tulupov/Telescope-build/CMakeFiles/install.dir
+/home/local1/work/Telescope_tulupov/Telescope-build/CMakeFiles/install/local.dir
+/home/local1/work/Telescope_tulupov/Telescope-build/CMakeFiles/install/strip.dir
+/home/local1/work/Telescope_tulupov/Telescope-build/CMakeFiles/Telescope.dir
