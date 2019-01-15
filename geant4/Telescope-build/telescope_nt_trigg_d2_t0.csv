@@ -1,0 +1,11 @@
+#class tools::wcsv::ntuple
+#title trigg_d2
+#separator 44
+#vector_separator 59
+#column double E0,keV
+#column double Det1,keV
+#column double Det2,keV
+#column double Det3,keV
+#column double Det4,keV
+#column double CF
+#column double angz

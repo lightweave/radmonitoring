@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE gdml [
+<!ENTITY materials SYSTEM "materials.xml">
+]>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+<define>
+<position name="central" x="0" y="0" z="0" unit="mm"/>
+<rotation name="identity" x="0" y="0" z="0" unit="degree"/>
+<variable name="DEGtoRAD" value="1.74532925199433E-02"/>
+</define>
+<!-- the content of the materials.xml file will be included here -->
+
+&materials;
+
+<solids>
+<tube name="Det1_PartBody" rmin="0.000000" rmax="4.000000" z="(0.020000)*2" startphi="0.000000" deltaphi="360.000000" aunit="deg" lunit="mm"/>
+<tube name="Det2_PartBody" rmin="0.000000" rmax="4.000000" z="(0.250000)*2" startphi="0.000000" deltaphi="360.000000" aunit="deg" lunit="mm"/>
+<tube name="Det3_PartBody" rmin="0.000000" rmax="7.000000" z="(5.000000)*2" startphi="0.000000" deltaphi="360.000000" aunit="deg" lunit="mm"/>
+<tube name="Det4_PartBody" rmin="0.000000" rmax="10.000000" z="(0.500000)*2" startphi="0.000000" deltaphi="360.000000" aunit="deg" lunit="mm"/>
+<box name="World_PartBody" x="(50.000000)*2" y="(50.000000)*2" z="(150.000000)*2" lunit="mm"/>
+<tube name="Colimator_PartBody" rmin="0.000000" rmax="22.000000" z="(14.000000)*2" startphi="0.000000" deltaphi="360.000000" aunit="deg" lunit="mm"/>
+<tube name="Inner_plex_PartBody" rmin="4.000000" rmax="9.500000" z="(5.350000)*2" startphi="0.000000" deltaphi="360.000000" aunit="deg" lunit="mm"/>
+<tube name="Filter_PartBody" rmin="0.000000" rmax="4.000000" z="(0.005000)*2" startphi="0.000000" deltaphi="360.000000" aunit="deg" lunit="mm"/>
+<tube name="Foto_PartBody" rmin="0.000000" rmax="7.000000" z="(0.150000)*2" startphi="0.000000" deltaphi="360.000000" aunit="deg" lunit="mm"/>
+<cone name="VacDet_PartBody" rmin1="0.000000" rmax1="12.800000" rmin2="0.000000" rmax2="4.000000" z="(14.000000)*2" startphi="0.000000" deltaphi="360.000000" aunit="deg" lunit="mm"/>
+<tube name="Inner_Plex_2_PartBody" rmin="8.000000" rmax="10.000000" z="(2.500000)*2" startphi="0.000000" deltaphi="360.000000" aunit="deg" lunit="mm"/>
+<tube name="Inner_Plex_3_PartBody" rmin="8.000000" rmax="18.500000" z="(8.000000)*2" startphi="0.000000" deltaphi="360.000000" aunit="deg" lunit="mm"/>
+<tube name="Shell_1_PartBody" rmin="10.000000" rmax="28.500000" z="(12.200000)*2" startphi="0.000000" deltaphi="360.000000" aunit="deg" lunit="mm"/>
+<tube name="Shell_2_PartBody" rmin="18.500000" rmax="28.500000" z="(20.000000)*2" startphi="0.000000" deltaphi="360.000000" aunit="deg" lunit="mm"/>
+<tube name="Back_shall_PartBody" rmin="0.000000" rmax="18.500000" z="(7.500000)*2" startphi="0.000000" deltaphi="360.000000" aunit="deg" lunit="mm"/>
+</solids>
+
+<structure>
+<volume name="Det1">
+<materialref ref="G4_Si"/>
+<solidref ref="Det1_PartBody"/>
+</volume>
+<volume name="Det2">
+<materialref ref="G4_Si"/>
+<solidref ref="Det2_PartBody"/>
+</volume>
+<volume name="Det3">
+<materialref ref="G4_CESIUM_IODIDE"/>
+<solidref ref="Det3_PartBody"/>
+</volume>
+<volume name="Det4">
+<materialref ref="G4_Si"/>
+<solidref ref="Det4_PartBody"/>
+</volume>
+
+<volume name="VacDet">
+<materialref ref="G4_Galactic"/>
+<solidref ref="VacDet_PartBody"/>
+</volume>
+
+
+<volume name="Colimator">
+<materialref ref="G4_BRASS"/>
+<solidref ref="Colimator_PartBody"/>
+<physvol>
+<volumeref ref="VacDet"/>
+<positionref ref="central"/>
+<rotationref ref="identity"/>
+</physvol>
+</volume>
+
+<volume name="Inner_plex">
+<materialref ref="G4_PLEXIGLASS"/>
+<solidref ref="Inner_plex_PartBody"/>
+</volume>
+<volume name="Filter">
+<materialref ref="G4_Si"/>
+<solidref ref="Filter_PartBody"/>
+</volume>
+<volume name="Foto">
+<materialref ref="G4_Si"/>
+<solidref ref="Foto_PartBody"/>
+</volume>
+
+<volume name="Inner_Plex_2">
+<materialref ref="G4_PLEXIGLASS"/>
+<solidref ref="Inner_Plex_2_PartBody"/>
+</volume>
+<volume name="Inner_Plex_3">
+<materialref ref="G4_PLEXIGLASS"/>
+<solidref ref="Inner_Plex_3_PartBody"/>
+</volume>
+<volume name="Shell_1">
+<materialref ref="G4_BRASS"/>
+<solidref ref="Shell_1_PartBody"/>
+</volume>
+<volume name="Shell_2">
+<materialref ref="G4_BRASS"/>
+<solidref ref="Shell_2_PartBody"/>
+</volume>
+<volume name="Back_shall">
+<materialref ref="G4_BRASS"/>
+<solidref ref="Back_shall_PartBody"/>
+</volume>
+<volume name="World">
+<materialref ref="G4_Galactic"/>
+<solidref ref="World_PartBody"/>
+
+<physvol>
+<volumeref ref="Det1"/>
+<position name="Det1_pos_World" x="0" y="0" z="44.68" unit="mm"/>
+<rotationref ref="identity"/>
+</physvol>
+<physvol>
+<volumeref ref="Det2"/>
+<position name="Det2_pos_World" x="0" y="0" z="49.95" unit="mm"/>
+<rotationref ref="identity"/>
+</physvol>
+<physvol>
+<volumeref ref="Det3"/>
+<position name="Det3_pos_World" x="0" y="0" z="60.2" unit="mm"/>
+<rotationref ref="identity"/>
+</physvol>
+<physvol>
+<volumeref ref="Det4"/>
+<position name="Det4_pos_World" x="0" y="0" z="72" unit="mm"/>
+<rotationref ref="identity"/>
+</physvol>
+<physvol>
+<volumeref ref="Inner_plex"/>
+<position name="Inner_plex_pos_World" x="0" y="0" z="36.35" unit="mm"/>
+<rotationref ref="identity"/>
+</physvol>
+<physvol>
+<volumeref ref="Filter"/>
+<position name="Filter_pos_World" x="0" y="0" z="31.27" unit="mm"/>
+<rotationref ref="identity"/>
+</physvol>
+<physvol>
+<volumeref ref="Foto"/>
+<position name="Foto_pos_World" x="0" y="0" z="65.35" unit="mm"/>
+<rotationref ref="identity"/>
+</physvol>
+<physvol>
+<volumeref ref="Colimator"/>
+<position name="Colimator_pos_World" x="0" y="0" z="14" unit="mm"/>
+<rotationref ref="identity"/>
+</physvol>
+<physvol>
+<volumeref ref="Inner_Plex_2"/>
+<position name="Inner_Plex_2_pos_World" x="0" y="0" z="49.95" unit="mm"/>
+<rotationref ref="identity"/>
+</physvol>
+<physvol>
+<volumeref ref="Inner_Plex_3"/>
+<position name="Inner_Plex_3_pos_World" x="0" y="0" z="60.45" unit="mm"/>
+<rotationref ref="identity"/>
+</physvol>
+<physvol>
+<volumeref ref="Shell_1"/>
+<position name="Shell_1_pos_World" x="0" y="0" z="40.2" unit="mm"/>
+<rotationref ref="identity"/>
+</physvol>
+<physvol>
+<volumeref ref="Shell_2"/>
+<position name="Shell_2_pos_World" x="0" y="0" z="72.4" unit="mm"/>
+<rotationref ref="identity"/>
+</physvol>
+<physvol>
+<volumeref ref="Back_shall"/>
+<position name="Back_shall_pos_World" x="0" y="0" z="84.9" unit="mm"/>
+<rotationref ref="identity"/>
+</physvol>
+</volume>
+
+</structure>
+<setup name="FAIRgeom" version="1.0">
+<world ref="World"/>
+</setup>
+</gdml>
