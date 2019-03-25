@@ -48,5 +48,5 @@ The combination of discussed software packages allows to optimize the parameters
 
  Application of the results obtained using the presented software codes at the design and production stages of spacecraft will significantly increase their reliability and extend the service life under the space radiation exposure.
  
- Acknowledgments:
+# Acknowledgments:
 Current research was funded by RFBR according to the project №18-32-00727-mol-a.
